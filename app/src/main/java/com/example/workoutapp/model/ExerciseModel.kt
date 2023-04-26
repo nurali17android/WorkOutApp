@@ -1,23 +1,23 @@
 package com.example.workoutapp.model
 
-data class ExerciseModel(
+class ExerciseModel(
     private var id:Int,
     private var name: String,
     private var image : Int,
-    private var isCompleted : Boolean,
-    private var isSelected : Boolean,
+    private var isCompleted : Boolean = false,
+    private var isSelected : Boolean = false,
 ){
+    fun getName() : String {
+        return name
+    }
+    fun setName(name: String){
+        this.name = name
+    }
     fun getId() :Int{
         return id
     }
     fun setId(id:Int) {
         this.id = id
-    }
-    fun getName():String{
-        return name
-    }
-    fun setName(name: String){
-        this.name = name
     }
     fun getImage():Int{
         return image
@@ -31,8 +31,8 @@ data class ExerciseModel(
     fun setIsCompleted(isCompleted: Boolean){
         this.isCompleted = isCompleted
     }
-    fun getIsSelected(isSelected: Boolean){
-        this.isSelected = isSelected
+    fun getIsSelected():Boolean{
+        return isSelected
     }
     fun setIsSelected(isSelected: Boolean){
         this.isSelected = isSelected
