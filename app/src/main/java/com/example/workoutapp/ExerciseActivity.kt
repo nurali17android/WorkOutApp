@@ -1,6 +1,7 @@
 package com.example.workoutapp
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
@@ -13,6 +14,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.workoutapp.adapter.ExerciseStatusAdapter
 import com.example.workoutapp.databinding.ActivityExerciseBinding
+import com.example.workoutapp.databinding.DialogCustomBackConfirmationBinding
 import com.example.workoutapp.model.Constants
 import com.example.workoutapp.model.ExerciseModel
 import java.util.*
@@ -36,8 +38,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private var exerciseAdapter : ExerciseStatusAdapter? = null
 
-    private var restTimerDuration:Long = 1
-    private var exerciseTimerDuration:Long = 1
+    private var restTimerDuration:Long = 3
+    private var exerciseTimerDuration:Long = 3
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +54,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         } // activate back button
         binding?.toolBarExercise?.setNavigationOnClickListener {
-            onBackPressed()
+            customDialogForBackButton()
         }
         tts = TextToSpeech(this,this)
 
@@ -96,7 +98,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             override fun onFinish() {
                 currentExercisePosition++
                 exerciseList!![currentExercisePosition].setIsSelected(true)
-                exerciseAdapter!!.notifyDataSetChanged()
+                exerciseAdapter?.notifyDataSetChanged()
             setUpExerciseView()
             }
         }.start()
@@ -172,6 +174,21 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 }
             }
         }.start()
+    }
+    private fun customDialogForBackButton() {
+        val customDialog = Dialog(this)
+        //Todo: create a binding variable
+        val dialogBinding = DialogCustomBackConfirmationBinding.inflate(layoutInflater)
+        customDialog.setContentView(dialogBinding.root)
+        customDialog.setCanceledOnTouchOutside(false)
+        dialogBinding.tvYes.setOnClickListener {
+            this@ExerciseActivity.finish()
+            customDialog.dismiss()
+        }
+        dialogBinding.tvNo.setOnClickListener {
+            customDialog.dismiss()
+        }
+        customDialog.show()
     }
 
     override fun onDestroy() {
